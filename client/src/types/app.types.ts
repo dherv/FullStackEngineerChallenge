@@ -15,3 +15,8 @@ export interface IEmployee {
   department: string;
   position: string;
 }
+
+export interface IRoute {
+  path: string;
+  title: string;
+}
