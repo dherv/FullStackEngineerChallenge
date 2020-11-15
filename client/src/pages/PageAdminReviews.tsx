@@ -63,7 +63,9 @@ const PageAdminReviews: FC = () => {
       dataIndex: "review",
       key: "review",
       render: (text: string, record: any) => {
-        return record.text;
+        return <div style={{overflow: 'auto', maxWidth: 250,  
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap"}}>{record.text}</div>;
       },
     },
     {
@@ -140,8 +142,8 @@ const PageAdminReviews: FC = () => {
   const reset = () => {
     setVisible(false);
     setReviewEdit(null);
-    setEditEmployee(null)
-    setEditReviewer(null)
+    setEditEmployee(null);
+    setEditReviewer(null);
     setSelectedEmployee(null);
     setSelectedReviewer(null);
   };
