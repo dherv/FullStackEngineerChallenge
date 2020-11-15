@@ -1,11 +1,10 @@
-import { Form, Modal, Select, Table } from "antd";
-import React, { FC, useEffect, useReducer, useState } from "react";
-import Api from "../Api";
-import AddElement from "../components/AddElement";
-import FormButtonSubmit from "../components/FormButtonSubmit";
-import TableActionButtons from "../components/TableActionButtons";
-import { IEmployee, IReview } from "../types/app.types";
+import { Form, Modal, Select, Table } from 'antd';
+import React, { FC, useEffect, useReducer, useState } from 'react';
+import Api from '../Api';
+import AddElement from '../components/AddElement';
+import FormButtonSubmit from '../components/FormButtonSubmit';
 import TableButtonActions from '../components/TableButtonActions';
+import { IEmployee, IReview } from '../types/app.types';
 
 const { Option } = Select;
 
@@ -33,16 +32,92 @@ const reducer = (state: any, action: any) => {
 };
 
 const PageAdminReviews: FC = () => {
+  const [data, dispatchData] = useReducer(reducer, []) as any;
+  const [employees, setEmployees] = useState<IEmployee[]>([]);
+  const [visible, setVisible] = useState<boolean>(false);
+  const [selectedEmployee, setSelectedEmployee] = useState<number | null>(null);
+  const [selectedReviewer, setSelectedReviewer] = useState<number | null>(null);
+  const [reviewEdit, setReviewEdit] = useState<number | null>(null);
+  const [editEmployee, setEditEmployee] = useState<{
+    id: number;
+    name: string;
+  } | null>();
+  const [editReviewer, setEditReviewer] = useState<{
+    id: number;
+    name: string;
+  } | null>();
+
+  useEffect(() => {
+    const fetchReviews = () => {
+      return Api.get("/reviews").then((response: IReview[]) =>
+        dispatchData({ type: "init", payload: response })
+      );
+    };
+    const fetchEmployees = () => {
+      return Api.get("/employees").then((response: IEmployee[]) =>
+        setEmployees(response)
+      );
+    };
+    fetchReviews();
+    fetchEmployees();
+  }, []);
+
+  const handleClickAdd = () => setVisible(true);
+
+  const handleOk = () => {
+    const postReview = {
+      employeeId: selectedEmployee,
+      reviewerId: selectedReviewer,
+      pending: true,
+      text: null,
+    };
+    if (reviewEdit) {
+      return Api.put(`/reviews/${reviewEdit}`, postReview).then(
+        (response: IReview) => {
+          dispatchData({ type: "update", payload: response });
+          reset();
+        }
+      );
+    } else {
+      return Api.post("/reviews", postReview).then((response: IReview) => {
+        dispatchData({ type: "add", payload: response });
+        reset();
+      });
+    }
+  };
+
+  const handleCancel = () => {
+    reset();
+  };
+
+  const handleChangeEmployee = (employeeId: number) => {
+    setSelectedEmployee(employeeId);
+  };
+
+  const handleChangeReviewer = (reviewerId: number) => {
+    setSelectedReviewer(reviewerId);
+  };
+
   const handleEdit = (record: IReview) => {
     setReviewEdit(record.id);
     setEditEmployee({ id: record.employee.id, name: record.employee.name });
     setEditReviewer({ id: record.reviewer.id, name: record.reviewer.name });
     setVisible(true);
   };
+
   const handleDelete = (record: IReview) => {
     Api.delete(`/reviews/${record.id}`).then(() => {
       dispatchData({ type: "delete", payload: record });
     });
+  };
+
+  const reset = () => {
+    setVisible(false);
+    setReviewEdit(null);
+    setEditEmployee(null);
+    setEditReviewer(null);
+    setSelectedEmployee(null);
+    setSelectedReviewer(null);
   };
 
   const columns = [
@@ -101,76 +176,6 @@ const PageAdminReviews: FC = () => {
       ),
     },
   ];
-
-  const [data, dispatchData] = useReducer(reducer, []) as any;
-  const [employees, setEmployees] = useState<IEmployee[]>([]);
-  const [visible, setVisible] = useState<boolean>(false);
-  const [selectedEmployee, setSelectedEmployee] = useState<number | null>(null);
-  const [selectedReviewer, setSelectedReviewer] = useState<number | null>(null);
-  const [reviewEdit, setReviewEdit] = useState<number | null>(null);
-  const [editEmployee, setEditEmployee] = useState<{
-    id: number;
-    name: string;
-  } | null>();
-  const [editReviewer, setEditReviewer] = useState<{
-    id: number;
-    name: string;
-  } | null>();
-
-  useEffect(() => {
-    const fetchReviews = () => {
-      return Api.get("/reviews").then((response: IReview[]) =>
-        dispatchData({ type: "init", payload: response })
-      );
-    };
-    const fetchEmployees = () => {
-      return Api.get("/employees").then((response: IEmployee[]) =>
-        setEmployees(response)
-      );
-    };
-    fetchReviews();
-    fetchEmployees();
-  }, []);
-
-  const handleClickAdd = () => setVisible(true);
-  const handleOk = () => {
-    const postReview = {
-      employeeId: selectedEmployee,
-      reviewerId: selectedReviewer,
-      pending: true,
-      text: null,
-    };
-    if (reviewEdit) {
-      return Api.put(`/reviews/${reviewEdit}`, postReview).then(
-        (response: IReview) => {
-          dispatchData({ type: "update", payload: response });
-          reset();
-        }
-      );
-    } else {
-      return Api.post("/reviews", postReview).then((response: IReview) => {
-        dispatchData({ type: "add", payload: response });
-        reset();
-      });
-    }
-  };
-  const handleCancel = () => {
-    reset();
-  };
-  const handleChangeEmployee = (employeeId: number) => {
-    setSelectedEmployee(employeeId);
-  };
-  const handleChangeReviewer = (reviewerId: number) => {
-    setSelectedReviewer(reviewerId);
-  };
-  const reset = () => {
-    setVisible(false);
-    setReviewEdit(null);
-    setEditEmployee(null);
-    setEditReviewer(null);
-    setSelectedEmployee(null);
-    setSelectedReviewer(null);
-  };
 
   return (
     <section>
