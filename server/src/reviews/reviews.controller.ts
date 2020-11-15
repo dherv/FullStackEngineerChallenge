@@ -27,7 +27,7 @@ export class ReviewsController {
 
   @Get()
   findAll(@Query() query: ListAllEntities): Promise<Review[]> {
-    return this.reviewsService.findAll();
+    return this.reviewsService.findAll(query);
   }
 
   @Get(':id')

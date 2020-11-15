@@ -7,6 +7,7 @@ export class CreateReviewDto {
 }
 export class ListAllEntities {
   limit: number;
+  reviewerId: number;
 }
 export class UpdateReviewDto {
   employeeId: number;

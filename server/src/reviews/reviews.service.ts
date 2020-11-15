@@ -11,9 +11,17 @@ export class ReviewsService {
     private reviewsRepository: Repository<Review>,
   ) {}
 
-  async findAll(): Promise<Review[]> {
-    return this.reviewsRepository.find({ relations: ['employee', 'reviewer'] });
+  async findAll(query): Promise<Review[]> {
+    const sql = query.reviewerId
+      ? {
+          relations: ['employee', 'reviewer'],
+          where: { reviewerId: query.reviewerId },
+        }
+      : { relations: ['employee', 'reviewer'] };
+
+    return this.reviewsRepository.find(sql);
   }
+
   async findOne(id: string): Promise<Review> {
     return this.reviewsRepository.findOne(id);
   }
