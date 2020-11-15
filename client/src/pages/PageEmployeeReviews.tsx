@@ -111,7 +111,7 @@ const PageEmployeeReviews: FC = () => {
               description={
                 item.pending && !item.text
                   ? `please write a review about ${item.employee.name}`
-                  : `your review: ${item.text}`
+                  : (<div style={{overflow: 'auto'}}><span style={{fontWeight: 600}}>your review</span>: {item.text}</div>)
               }
             />
           </List.Item>
