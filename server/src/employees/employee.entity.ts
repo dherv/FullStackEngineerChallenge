@@ -22,13 +22,13 @@ export class Employee {
   @Column()
   position: string;
 
-  @OneToMany((type) => Review, (review) => review.employeeId, {
-    cascade: ['insert'],
+  @OneToMany(() => Review, (review) => review.employeeId, {
+    cascade: ['insert', 'soft-remove'],
   })
   employee: Employee[];
 
-  @OneToMany((type) => Review, (review) => review.reviewerId, {
-    cascade: ['insert'],
+  @OneToMany(() => Review, (review) => review.reviewerId, {
+    cascade: ['insert', 'soft-remove'],
   })
   reviewer: Employee[];
 }

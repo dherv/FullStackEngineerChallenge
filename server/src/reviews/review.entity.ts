@@ -3,8 +3,6 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Employee } from '../employees/employee.entity';
@@ -29,11 +27,11 @@ export class Review {
   @Column({ nullable: true })
   score: number;
 
-  @ManyToOne((type) => Employee)
+  @ManyToOne(() => Employee, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'reviewerId' })
   reviewer: Employee;
 
-  @ManyToOne((type) => Employee)
+  @ManyToOne(() => Employee, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'employeeId' })
   employee: Employee;
 }
