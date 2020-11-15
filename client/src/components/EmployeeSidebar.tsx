@@ -1,12 +1,13 @@
-import { Menu } from "antd";
-import React, { FC } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { Menu } from 'antd';
+import React, { FC } from 'react';
+import { NavLink, useLocation, useParams } from 'react-router-dom';
 
 const EmployeeSidebar: FC = () => {
   const location = useLocation();
+  const params = useParams() as any;
   const routes = [
     {
-      path: "/employee/1/reviews",
+      path: `/employee/${params.id}/reviews`,
       title: "reviews",
     },
   ];
@@ -17,6 +18,9 @@ const EmployeeSidebar: FC = () => {
           <NavLink to={route.path}>{route.title}</NavLink>
         </Menu.Item>
       ))}
+      <Menu.Item style={{ position: "absolute", bottom: 0 }}>
+        <NavLink to={"/admin/employees"}>Log as admin</NavLink>
+      </Menu.Item>
     </Menu>
   );
 };

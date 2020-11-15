@@ -1,8 +1,8 @@
-import { Avatar, Button, Form, Input, List, Modal } from "antd";
-import React, { FC, useEffect, useReducer, useState } from "react";
-import { useParams } from "react-router-dom";
-import { CheckCircleTwoTone, ClockCircleTwoTone } from "@ant-design/icons";
-import Api from "../Api";
+import { Avatar, Button, Form, Input, List, Modal } from 'antd';
+import React, { FC, useEffect, useReducer, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { CheckCircleTwoTone, ClockCircleTwoTone } from '@ant-design/icons';
+import Api from '../Api';
 
 const { TextArea } = Input;
 
@@ -11,7 +11,6 @@ const reducer = (state: any, action: any) => {
     case "init":
       return action.payload;
     case "update":
-      console.log(action.payload);
       return state.map((item: any, index: number) => {
         if (item.id !== action.payload.id) {
           return item;
@@ -35,7 +34,7 @@ const PageEmployeeReviews: FC = () => {
   useEffect(() => {
     const fetchReviews = () => {
       Api.get(`/reviews?reviewerId=${params.id}/`).then((response) => {
-        console.log(response);
+
         dispatchData({
           type: "init",
           payload: response,
@@ -75,6 +74,7 @@ const PageEmployeeReviews: FC = () => {
     setReviewText("");
     setVisible(false);
   };
+  
   return (
     <section>
       <List
@@ -83,9 +83,9 @@ const PageEmployeeReviews: FC = () => {
         renderItem={(item: any) => (
           <List.Item
             actions={[
-              <a key="list-loadmore-edit" onClick={() => handleClickEdit(item)}>
+              <Button type="link" key="list-loadmore-edit" onClick={() => handleClickEdit(item)}>
                 edit
-              </a>,
+              </Button>,
             ]}
           >
             <List.Item.Meta
@@ -102,7 +102,7 @@ const PageEmployeeReviews: FC = () => {
                   }
                 ></Avatar>
               }
-              title={<a href="https://ant.design">{item.employee.name}</a>}
+              title={item.employee.name}
               description={
                 item.pending && !item.text
                   ? `please write a review about ${item.employee.name}`
@@ -118,7 +118,7 @@ const PageEmployeeReviews: FC = () => {
         footer={null}
         onCancel={handleCancel}
       >
-        <Form onFinish={() => handleOk()}>
+        <Form initialValues={{ remember: false }} onFinish={() => handleOk()}>
           <Form.Item
             rules={[{ required: true, message: "Please add a review" }]}
             name="review"
