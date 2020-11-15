@@ -1,7 +1,12 @@
 import './App.css';
 import { Button, Divider, Layout, Menu, PageHeader } from 'antd';
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+} from 'react-router-dom';
 import AdminSidebar from './components/AdminSidebar';
 import EmployeeSidebar from './components/EmployeeSidebar';
 import PageAdminEmployees from './pages/PageAdminEmployees';
@@ -113,6 +118,12 @@ function App() {
           </Footer>
         </Layout>
       </Layout>
+      <Switch>
+        <Route path="/admin/employees" />
+        <Route path="/admin/reviews" />
+        <Route path="/employee/:id/reviews" />
+        <Route component={() => <Redirect to="/admin/employees" />} />
+      </Switch>
     </Router>
   );
 }
