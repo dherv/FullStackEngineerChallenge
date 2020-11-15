@@ -10,12 +10,12 @@ const { Option } = Select;
 
 const reducer = (state: any, action: any) => {
   switch (action.type) {
-    case "init":
+    case 'init':
       return action.payload;
-    case "add":
+    case 'add':
       console.log(action.payload);
       return [...state.slice(), action.payload];
-    case "update":
+    case 'update':
       return state.map((item: any) => {
         if (item.id !== action.payload.id) {
           return item;
@@ -24,7 +24,7 @@ const reducer = (state: any, action: any) => {
           ...action.payload,
         };
       });
-    case "delete":
+    case 'delete':
       return state.filter((item: any) => item.id !== action.payload.id);
     default:
       throw new Error();
@@ -49,12 +49,12 @@ const PageAdminReviews: FC = () => {
 
   useEffect(() => {
     const fetchReviews = () => {
-      return Api.get("/reviews").then((response: IReview[]) =>
-        dispatchData({ type: "init", payload: response })
+      return Api.get('/reviews').then((response: IReview[]) =>
+        dispatchData({ type: 'init', payload: response })
       );
     };
     const fetchEmployees = () => {
-      return Api.get("/employees").then((response: IEmployee[]) =>
+      return Api.get('/employees').then((response: IEmployee[]) =>
         setEmployees(response)
       );
     };
@@ -74,13 +74,13 @@ const PageAdminReviews: FC = () => {
     if (reviewEdit) {
       return Api.put(`/reviews/${reviewEdit}`, postReview).then(
         (response: IReview) => {
-          dispatchData({ type: "update", payload: response });
+          dispatchData({ type: 'update', payload: response });
           reset();
         }
       );
     } else {
-      return Api.post("/reviews", postReview).then((response: IReview) => {
-        dispatchData({ type: "add", payload: response });
+      return Api.post('/reviews', postReview).then((response: IReview) => {
+        dispatchData({ type: 'add', payload: response });
         reset();
       });
     }
@@ -107,7 +107,7 @@ const PageAdminReviews: FC = () => {
 
   const handleDelete = (record: IReview) => {
     Api.delete(`/reviews/${record.id}`).then(() => {
-      dispatchData({ type: "delete", payload: record });
+      dispatchData({ type: 'delete', payload: record });
     });
   };
 
@@ -122,33 +122,33 @@ const PageAdminReviews: FC = () => {
 
   const columns = [
     {
-      title: "Employee",
-      dataIndex: "name",
-      key: "name",
+      title: 'Employee',
+      dataIndex: 'name',
+      key: 'name',
       render: (text: string, record: IReview) => {
         return record.employee.name;
       },
     },
     {
-      title: "Reviewer",
-      dataIndex: "reviewer",
-      key: "reviewer",
+      title: 'Reviewer',
+      dataIndex: 'reviewer',
+      key: 'reviewer',
       render: (text: string, record: IReview) => {
         return record.reviewer.name;
       },
     },
     {
-      title: "Review",
-      dataIndex: "review",
-      key: "review",
+      title: 'Review',
+      dataIndex: 'review',
+      key: 'review',
       render: (text: string, record: IReview) => {
         return (
           <div
             style={{
-              overflow: "auto",
+              overflow: 'auto',
               maxWidth: 250,
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
             }}
           >
             {record.text}
@@ -157,16 +157,16 @@ const PageAdminReviews: FC = () => {
       },
     },
     {
-      title: "Pending",
-      dataIndex: "pending",
-      key: "pending",
+      title: 'Pending',
+      dataIndex: 'pending',
+      key: 'pending',
       render: (text: string, record: IReview) => {
         return record.pending.toString();
       },
     },
     {
-      title: "Action",
-      key: "action",
+      title: 'Action',
+      key: 'action',
       render: (text: string, record: IReview) => (
         <TableButtonActions
           record={record}

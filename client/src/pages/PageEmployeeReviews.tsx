@@ -1,18 +1,18 @@
-import { Avatar, Button, Form, Input, List, Modal } from "antd";
-import React, { FC, useEffect, useReducer, useState } from "react";
-import { useParams } from "react-router-dom";
-import { CheckCircleTwoTone, ClockCircleTwoTone } from "@ant-design/icons";
-import Api from "../Api";
-import FormButtonSubmit from "../components/FormButtonSubmit";
-import { IReview } from "../types/app.types";
+import { Avatar, Button, Form, Input, List, Modal } from 'antd';
+import React, { FC, useEffect, useReducer, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { CheckCircleTwoTone, ClockCircleTwoTone } from '@ant-design/icons';
+import Api from '../Api';
+import FormButtonSubmit from '../components/FormButtonSubmit';
+import { IReview } from '../types/app.types';
 
 const { TextArea } = Input;
 
 const reducer = (state: any, action: any) => {
   switch (action.type) {
-    case "init":
+    case 'init':
       return action.payload;
-    case "update":
+    case 'update':
       return state.map((item: any, index: number) => {
         if (item.id !== action.payload.id) {
           return item;
@@ -38,7 +38,7 @@ const PageEmployeeReviews: FC = () => {
       Api.get(`/reviews?reviewerId=${params.id}/`).then(
         (response: IReview[]) => {
           dispatchData({
-            type: "init",
+            type: 'init',
             payload: response,
           });
         }
@@ -59,11 +59,15 @@ const PageEmployeeReviews: FC = () => {
 
   const handleOk = () => {
     if (editReview) {
-      const putReview = { ...editReview, text: reviewText, pending: false };
+      const putReview = {
+        ...editReview,
+        text: reviewText,
+        pending: false,
+      };
       Api.put(`/reviews/${editReview.id}`, putReview).then(
         (response: IReview) => {
           dispatchData({
-            type: "update",
+            type: 'update',
             payload: response,
           });
           reset();
@@ -78,7 +82,7 @@ const PageEmployeeReviews: FC = () => {
 
   const reset = () => {
     setEditReview(null);
-    setReviewText("");
+    setReviewText('');
     setVisible(false);
   };
 
@@ -102,7 +106,7 @@ const PageEmployeeReviews: FC = () => {
             <List.Item.Meta
               avatar={
                 <Avatar
-                  style={{ backgroundColor: "transparent" }}
+                  style={{ backgroundColor: 'transparent' }}
                   size="large"
                   icon={
                     !item.pending ? (
@@ -118,8 +122,8 @@ const PageEmployeeReviews: FC = () => {
                 item.pending && !item.text ? (
                   `please write a review about ${item.employee.name}`
                 ) : (
-                  <div style={{ overflow: "auto" }}>
-                    <span style={{ fontWeight: 600 }}>your review</span>:{" "}
+                  <div style={{ overflow: 'auto' }}>
+                    <span style={{ fontWeight: 600 }}>your review</span>:{' '}
                     {item.text}
                   </div>
                 )
@@ -137,7 +141,12 @@ const PageEmployeeReviews: FC = () => {
       >
         <Form initialValues={{ remember: false }} onFinish={handleOk}>
           <Form.Item
-            rules={[{ required: true, message: "Please write a review" }]}
+            rules={[
+              {
+                required: true,
+                message: 'Please write a review',
+              },
+            ]}
             name="review"
           >
             <TextArea

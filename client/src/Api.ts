@@ -1,12 +1,12 @@
 export default class Api {
-  static prefix = "http://localhost:7000/api";
+  static prefix = 'http://localhost:7000/api';
 
   static url(endpoint: string) {
     return `${this.prefix}${endpoint}`;
   }
   static headers(): Headers {
     const requestHeaders = new Headers({
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     });
 
     return requestHeaders;
@@ -14,7 +14,7 @@ export default class Api {
 
   static get(endpoint: string): Promise<any> {
     return fetch(this.url(endpoint), {
-      method: "GET",
+      method: 'GET',
       headers: this.headers(),
     })
       .then((response) => {
@@ -30,7 +30,7 @@ export default class Api {
 
   static post(endpoint: string, body: any): Promise<any> {
     return fetch(this.url(endpoint), {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(body),
       headers: this.headers(),
     })
@@ -47,7 +47,7 @@ export default class Api {
 
   static put(endpoint: string, body: any): Promise<any> {
     return fetch(this.url(endpoint), {
-      method: "PUT",
+      method: 'PUT',
       body: JSON.stringify(body),
       headers: this.headers(),
     })
@@ -64,7 +64,7 @@ export default class Api {
 
   static delete(endpoint: string): Promise<any> {
     return fetch(this.url(endpoint), {
-      method: "DELETE",
+      method: 'DELETE',
       headers: this.headers(),
     })
       .then((response) => {

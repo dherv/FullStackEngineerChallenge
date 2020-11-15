@@ -9,11 +9,11 @@ import { IEmployee } from '../types/app.types';
 
 const reducer = (state: any, action: any) => {
   switch (action.type) {
-    case "init":
+    case 'init':
       return action.payload;
-    case "add":
+    case 'add':
       return [...state, action.payload];
-    case "update":
+    case 'update':
       return state.map((item: any) => {
         if (item.id !== action.payload.id) {
           return item;
@@ -22,7 +22,7 @@ const reducer = (state: any, action: any) => {
           ...action.payload,
         };
       });
-    case "delete":
+    case 'delete':
       return state.filter((item: any) => item.id !== action.payload.id);
     default:
       throw new Error();
@@ -33,16 +33,16 @@ const PageAdminEmployees: FC = () => {
   const [data, dispatchData] = useReducer(reducer, []) as any;
   const [employeeEdit, setEmployeeEdit] = useState<number | null>(null);
   const [form, setForm] = useState<any>({
-    name: "",
-    department: "",
-    position: "",
+    name: '',
+    department: '',
+    position: '',
   });
   const [visible, setVisible] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchEmployees = () => {
-      return Api.get("/employees").then((response: IEmployee[]) =>
-        dispatchData({ type: "init", payload: response })
+      return Api.get('/employees').then((response: IEmployee[]) =>
+        dispatchData({ type: 'init', payload: response })
       );
     };
     fetchEmployees();
@@ -53,14 +53,14 @@ const PageAdminEmployees: FC = () => {
     if (employeeEdit) {
       return Api.put(`/employees/${employeeEdit}`, postEmployee).then(
         (response: IEmployee) => {
-          dispatchData({ type: "update", payload: response });
+          dispatchData({ type: 'update', payload: response });
           reset();
         }
       );
     } else {
-      return Api.post("/employees", postEmployee).then(
+      return Api.post('/employees', postEmployee).then(
         (response: IEmployee) => {
-          dispatchData({ type: "add", payload: response });
+          dispatchData({ type: 'add', payload: response });
           reset();
         }
       );
@@ -94,38 +94,38 @@ const PageAdminEmployees: FC = () => {
 
   const handleDelete = (record: IEmployee) => {
     Api.delete(`/employees/${record.id}`).then(() => {
-      dispatchData({ type: "delete", payload: record });
+      dispatchData({ type: 'delete', payload: record });
     });
   };
 
   const reset = () => {
     setVisible(false);
     setEmployeeEdit(null);
-    setForm({ name: "", department: "", position: "" });
+    setForm({ name: '', department: '', position: '' });
   };
 
   const columns = [
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
       render: (text: string, record: IEmployee) => (
         <NavLink to={`/employee/${record.id}/reviews`}>{text}</NavLink>
       ),
     },
     {
-      title: "Department",
-      dataIndex: "department",
-      key: "department",
+      title: 'Department',
+      dataIndex: 'department',
+      key: 'department',
     },
     {
-      title: "Position",
-      dataIndex: "position",
-      key: "position",
+      title: 'Position',
+      dataIndex: 'position',
+      key: 'position',
     },
     {
-      title: "Action",
-      key: "action",
+      title: 'Action',
+      key: 'action',
       render: (text: string, record: IEmployee) => (
         <TableButtonActions
           record={record}
@@ -155,7 +155,7 @@ const PageAdminEmployees: FC = () => {
           <Form.Item
             label="name"
             name="name"
-            rules={[{ required: true, message: "Please input a name" }]}
+            rules={[{ required: true, message: 'Please input a name' }]}
           >
             <Input
               name="name"
@@ -168,7 +168,12 @@ const PageAdminEmployees: FC = () => {
           <Form.Item
             label="department"
             name="department"
-            rules={[{ required: true, message: "Please input a department" }]}
+            rules={[
+              {
+                required: true,
+                message: 'Please input a department',
+              },
+            ]}
           >
             <Input
               name="department"
@@ -181,7 +186,12 @@ const PageAdminEmployees: FC = () => {
           <Form.Item
             label="position"
             name="position"
-            rules={[{ required: true, message: "Please input a position" }]}
+            rules={[
+              {
+                required: true,
+                message: 'Please input a position',
+              },
+            ]}
           >
             <Input
               name="position"

@@ -1,5 +1,5 @@
 import './App.css';
-import { Button, Divider, Layout, Menu, PageHeader } from 'antd';
+import { Divider, Layout, Menu } from 'antd';
 import React from 'react';
 import {
   BrowserRouter as Router,
@@ -13,28 +13,28 @@ import PageAdminEmployees from './pages/PageAdminEmployees';
 import PageAdminReviews from './pages/PageAdminReviews';
 import PageEmployeeReviews from './pages/PageEmployeeReviews';
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Footer, Sider } = Layout;
 
 const routes = [
   {
-    path: "/admin/employees",
+    path: '/admin/employees',
     exact: true,
     sidebar: () => <AdminSidebar />,
-    header: "Admin",
+    header: 'Admin',
     main: () => <PageAdminEmployees />,
   },
   {
-    path: "/admin/reviews",
+    path: '/admin/reviews',
     exact: true,
     sidebar: () => <AdminSidebar />,
-    header: "Admin",
+    header: 'Admin',
     main: () => <PageAdminReviews />,
   },
   {
-    path: "/employee/:id/reviews",
+    path: '/employee/:id/reviews',
     exact: true,
     sidebar: () => <EmployeeSidebar />,
-    header: "Employee",
+    header: 'Employee',
     main: () => <PageEmployeeReviews />,
   },
 ];
@@ -46,20 +46,20 @@ function App() {
         <Sider
           theme="light"
           style={{
-            overflow: "auto",
-            height: "100%",
-            position: "fixed",
+            overflow: 'auto',
+            height: '100%',
+            position: 'fixed',
             left: 0,
           }}
         >
           <div
             style={{
               height: 32,
-              background: "rgba(255, 255, 255, 0.2)",
+              background: 'rgba(255, 255, 255, 0.2)',
               margin: 16,
             }}
           >
-            <span style={{ fontWeight: 600, color: "#ff3333" }}>PayPay</span>
+            <span style={{ fontWeight: 600, color: '#ff3333' }}>PayPay</span>
             <br />
             <span>
               <Switch>
@@ -91,9 +91,9 @@ function App() {
         <Layout className="site-layout" style={{ marginLeft: 200 }}>
           <Content
             style={{
-              margin: "24px 16px 0",
-              overflow: "initial",
-              minHeight: "calc(100vh - 70px - 24px)",
+              margin: '24px 16px 0',
+              overflow: 'initial',
+              minHeight: 'calc(100vh - 70px - 24px)',
             }}
           >
             <div className="site-layout-background" style={{ padding: 24 }}>
@@ -112,7 +112,7 @@ function App() {
           <Footer>
             <span style={{ fontWeight: 600 }}>PayPay</span>
             <span style={{ fontWeight: 300 }}>
-              {" "}
+              {' '}
               - Full Stack Developer Challenge 2020
             </span>
           </Footer>

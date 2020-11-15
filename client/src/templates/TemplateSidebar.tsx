@@ -1,7 +1,7 @@
-import { Menu } from "antd";
-import React, { FC } from "react";
-import { NavLink, useLocation } from "react-router-dom";
-import { IRoute } from "../types/app.types";
+import { Menu } from 'antd';
+import React, { FC } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
+import { IRoute } from '../types/app.types';
 
 const TemplateSidebar: FC<{ routes: IRoute[] }> = ({ children, routes }) => {
   const location = useLocation();
