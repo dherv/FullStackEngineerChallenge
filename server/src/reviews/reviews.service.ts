@@ -23,11 +23,16 @@ export class ReviewsService {
   }
 
   async findOne(id: string): Promise<Review> {
-    return this.reviewsRepository.findOne(id);
+    return this.reviewsRepository.findOne({
+      where: { id },
+      relations: ['employee', 'reviewer'],
+    });
   }
   async create(review: Review) {
-    return this.reviewsRepository.save(review);
+    const saved = await this.reviewsRepository.save(review);
+    return this.findOne(saved.id.toString());
   }
+
   async update(id: number, review: Review) {
     return this.reviewsRepository.save({ ...review, id: Number(id) });
   }
