@@ -1,4 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Review } from '../reviews/review.entity';
 
 @Entity()
 export class Employee {
@@ -13,4 +21,14 @@ export class Employee {
 
   @Column()
   position: string;
+
+  @OneToMany((type) => Review, (review) => review.employeeId, {
+    cascade: ['insert'],
+  })
+  employee: Employee[];
+
+  @OneToMany((type) => Review, (review) => review.reviewerId, {
+    cascade: ['insert'],
+  })
+  reviewer: Employee[];
 }
