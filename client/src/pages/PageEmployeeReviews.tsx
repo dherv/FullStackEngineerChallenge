@@ -1,5 +1,6 @@
 import { Avatar, Button, Form, Input, List, Modal } from 'antd';
-import React, { FC, useEffect, useReducer, useState } from 'react';
+import { FormInstance } from 'antd/lib/form';
+import React, { FC, useEffect, useReducer, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CheckCircleTwoTone, ClockCircleTwoTone } from '@ant-design/icons';
 import Api from '../Api';
@@ -31,6 +32,7 @@ const PageEmployeeReviews: FC = () => {
   const [reviewText, setReviewText] = useState<any>();
   const [visible, setVisible] = useState<boolean>(false);
 
+
   useEffect(() => {
     const fetchReviews = () => {
       Api.get(`/reviews?reviewerId=${params.id}/`).then((response) => {
@@ -52,6 +54,8 @@ const PageEmployeeReviews: FC = () => {
     setReview(item);
     setReviewText(item.text);
     setVisible(true);
+   
+   
   };
 
   const handleOk = () => {
@@ -70,6 +74,7 @@ const PageEmployeeReviews: FC = () => {
   };
 
   const reset = () => {
+
     setReview(null);
     setReviewText("");
     setVisible(false);
@@ -117,16 +122,18 @@ const PageEmployeeReviews: FC = () => {
         visible={visible}
         footer={null}
         onCancel={handleCancel}
+        destroyOnClose
       >
-        <Form initialValues={{ remember: false }} onFinish={() => handleOk()}>
+        <Form initialValues={{ remember: false }}  onFinish={handleOk}>
           <Form.Item
-            rules={[{ required: true, message: "Please add a review" }]}
+            rules={[{ required: true, message: "Please write a review" }]}
             name="review"
           >
             <TextArea
               name="review"
               rows={4}
               value={reviewText}
+              defaultValue={reviewText}
               onChange={handleChange}
             />
           </Form.Item>

@@ -1,7 +1,7 @@
-import { Button, Form, Modal, Select, Space, Table } from "antd";
-import React, { FC, useEffect, useReducer, useState } from "react";
-import Api from "../Api";
-import AddElement from "../components/AddElement";
+import { Button, Form, Modal, Select, Space, Table } from 'antd';
+import React, { FC, useEffect, useReducer, useState } from 'react';
+import Api from '../Api';
+import AddElement from '../components/AddElement';
 
 const { Option } = Select;
 
@@ -117,7 +117,6 @@ const PageAdminReviews: FC = () => {
       text: null,
     };
     if (reviewEdit) {
-      console.log(postReview);
       return Api.put(`/reviews/${reviewEdit}`, postReview).then((response) => {
         dispatchData({ type: "update", payload: response });
         reset();
@@ -141,10 +140,12 @@ const PageAdminReviews: FC = () => {
   const reset = () => {
     setVisible(false);
     setReviewEdit(null);
+    setEditEmployee(null)
+    setEditReviewer(null)
     setSelectedEmployee(null);
     setSelectedReviewer(null);
   };
-  console.log(selectedEmployee, selectedReviewer);
+
   return (
     <section>
       <AddElement text="Add a review" onClick={handleClickAdd} />
