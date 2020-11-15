@@ -34,7 +34,11 @@ export class ReviewsService {
   }
 
   async update(id: number, review: Review) {
-    return this.reviewsRepository.save({ ...review, id: Number(id) });
+    const saved = await this.reviewsRepository.save({
+      ...review,
+      id: Number(id),
+    });
+    return this.findOne(saved.id.toString());
   }
   async remove(id: string): Promise<void> {
     await this.reviewsRepository.delete(id);

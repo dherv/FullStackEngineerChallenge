@@ -1,7 +1,7 @@
-import { Card } from 'antd';
-import Avatar from 'antd/lib/avatar/avatar';
-import React, { FC } from 'react';
-import { PlusCircleTwoTone } from '@ant-design/icons';
+import { Card } from "antd";
+import Avatar from "antd/lib/avatar/avatar";
+import React, { FC } from "react";
+import { PlusCircleTwoTone } from "@ant-design/icons";
 
 const AddElement: FC<{
   text: string;

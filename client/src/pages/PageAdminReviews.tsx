@@ -1,17 +1,16 @@
-import { Button, Form, Input, Modal, Select, Space, Table } from 'antd';
-import React, { FC, useEffect, useReducer, useState } from 'react';
-import Api from '../Api';
-import AddElement from '../components/AddElement';
+import { Button, Form, Modal, Select, Space, Table } from "antd";
+import React, { FC, useEffect, useReducer, useState } from "react";
+import Api from "../Api";
+import AddElement from "../components/AddElement";
 
 const { Option } = Select;
 
-
- const reducer = (state: any, action: any) => {
+const reducer = (state: any, action: any) => {
   switch (action.type) {
     case "init":
       return action.payload;
     case "add":
-      console.log(action.payload)
+      console.log(action.payload);
       return [...state.slice(), action.payload];
     case "update":
       return state.map((item: any) => {
@@ -31,11 +30,10 @@ const { Option } = Select;
 
 const PageAdminReviews: FC = () => {
   const handleEdit = (record: any) => {
-  
-    setSelectedEmployee(record.employeedId)
-    setSelectedReviewer(record.reviewerId)
-    setVisible(true)
-  
+    setReviewEdit(record.id);
+    setEditEmployee({ id: record.employee.id, name: record.employee.name });
+    setEditReviewer({ id: record.reviewer.id, name: record.reviewer.name });
+    setVisible(true);
   };
   const handleDelete = (record: any) => {
     Api.delete(`/reviews/${record.id}`).then(() => {
@@ -91,12 +89,17 @@ const PageAdminReviews: FC = () => {
   const [data, dispatchData] = useReducer(reducer, []) as any;
   const [employees, setEmployees] = useState<any[]>([]);
   const [visible, setVisible] = useState<boolean>(false);
-  const [selectedEmployee, setSelectedEmployee] = useState<number|null>(null);
-  const [selectedReviewer, setSelectedReviewer] = useState<number|null>(null);
+  const [selectedEmployee, setSelectedEmployee] = useState<number | null>(null);
+  const [selectedReviewer, setSelectedReviewer] = useState<number | null>(null);
+  const [reviewEdit, setReviewEdit] = useState<number | null>(null);
+  const [editEmployee, setEditEmployee] = useState<any>({});
+  const [editReviewer, setEditReviewer] = useState<any>({});
 
   useEffect(() => {
     const fetchReviews = () => {
-      return Api.get("/reviews").then((response) => dispatchData({type: "init", payload: response}));
+      return Api.get("/reviews").then((response) =>
+        dispatchData({ type: "init", payload: response })
+      );
     };
     const fetchEmployees = () => {
       return Api.get("/employees").then((response) => setEmployees(response));
@@ -111,28 +114,37 @@ const PageAdminReviews: FC = () => {
       employeeId: selectedEmployee,
       reviewerId: selectedReviewer,
       pending: true,
-      text: null
+      text: null,
+    };
+    if (reviewEdit) {
+      console.log(postReview);
+      return Api.put(`/reviews/${reviewEdit}`, postReview).then((response) => {
+        dispatchData({ type: "update", payload: response });
+        reset();
+      });
+    } else {
+      return Api.post("/reviews", postReview).then((response) => {
+        dispatchData({ type: "add", payload: response });
+        reset();
+      });
     }
-    return Api.post("/reviews", postReview).then((response) => {
-      dispatchData({type: "add", payload: response})
-      reset()
-    })
   };
   const handleCancel = () => {
-    reset()
+    reset();
   };
-  const handleChangeEmployee = (employeeId:number) => {
-    setSelectedEmployee(employeeId)
+  const handleChangeEmployee = (employeeId: number) => {
+    setSelectedEmployee(employeeId);
   };
-  const handleChangeReviewer = (reviewerId:number) => {    console.log("called review")
-    setSelectedReviewer(reviewerId)
+  const handleChangeReviewer = (reviewerId: number) => {
+    setSelectedReviewer(reviewerId);
   };
   const reset = () => {
-    setVisible(false)
-    setSelectedEmployee(null)
-    setSelectedReviewer(null)
+    setVisible(false);
+    setReviewEdit(null);
+    setSelectedEmployee(null);
+    setSelectedReviewer(null);
   };
-
+  console.log(selectedEmployee, selectedReviewer);
   return (
     <section>
       <AddElement text="Add a review" onClick={handleClickAdd} />
@@ -140,33 +152,26 @@ const PageAdminReviews: FC = () => {
       <Modal
         title="Add a review"
         visible={visible}
-        onOk={handleOk}
         onCancel={handleCancel}
         destroyOnClose
-        footer={[
-          <Button key="back" onClick={handleCancel}>
-            Cancel
-          </Button>,
-          <Button
-            key="submit"
-            htmlType="submit"
-            type="primary"
-            disabled={!selectedReviewer || !selectedEmployee}
-            onClick={handleOk}
-          >
-            Submit
-          </Button>,
-        ]}
+        footer={null}
       >
-        <Form layout="vertical">
+        <Form
+          layout="vertical"
+          initialValues={{ remember: false }}
+          onFinish={() => handleOk()}
+        >
           <Form.Item label="select a person to review" name="employee">
             <Select
               placeholder="Select an employee to review"
               style={{ width: 200 }}
               onChange={handleChangeEmployee}
+              defaultValue={editEmployee ? editEmployee.name : (null as any)}
             >
               {employees.map((employee: any) => (
-                <Option key={`employee-${employee.id}`}  value={employee.id}>{employee.name}</Option>
+                <Option key={`employee-${employee.id}`} value={employee.id}>
+                  {employee.name}
+                </Option>
               ))}
             </Select>
           </Form.Item>
@@ -180,11 +185,26 @@ const PageAdminReviews: FC = () => {
               style={{ width: 200 }}
               disabled={!selectedEmployee}
               onChange={handleChangeReviewer}
+              defaultValue={editReviewer ? editReviewer.name : (null as any)}
             >
-              {employees.filter((employee:any) => employee.id !== selectedEmployee).map((employee: any) => (
-                <Option key={`reviewer-${employee.id}`} value={employee.id}>{employee.name}</Option>
-              ))}
+              {employees
+                .filter((employee: any) => employee.id !== selectedEmployee)
+                .map((employee: any) => (
+                  <Option key={`reviewer-${employee.id}`} value={employee.id}>
+                    {employee.name}
+                  </Option>
+                ))}
             </Select>
+          </Form.Item>
+          <Form.Item>
+            <Button
+              key="submit"
+              htmlType="submit"
+              type="primary"
+              disabled={!selectedReviewer || !selectedEmployee}
+            >
+              Submit
+            </Button>
           </Form.Item>
         </Form>
       </Modal>

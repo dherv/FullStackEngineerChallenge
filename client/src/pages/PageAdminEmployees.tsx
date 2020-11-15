@@ -1,8 +1,8 @@
-import { Button, Form, Input, Modal, Space, Table } from 'antd';
-import React, { FC, useEffect, useReducer, useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import Api from '../Api';
-import AddElement from '../components/AddElement';
+import { Button, Form, Input, Modal, Space, Table } from "antd";
+import React, { FC, useEffect, useReducer, useState } from "react";
+import { NavLink } from "react-router-dom";
+import Api from "../Api";
+import AddElement from "../components/AddElement";
 
 const reducer = (state: any, action: any) => {
   switch (action.type) {
@@ -123,7 +123,6 @@ const PageAdminEmployees: FC = () => {
   };
 
   const reset = () => {
-    console.log("REset");
     setVisible(false);
     setEmployeeEdit(null);
     setForm({ name: "", department: "", position: "" });
@@ -139,6 +138,7 @@ const PageAdminEmployees: FC = () => {
   const handleClickAdd = () => {
     setVisible(true);
   };
+  console.log(form);
   return (
     <section>
       <AddElement text="Add an employee" onClick={handleClickAdd} />
@@ -146,30 +146,26 @@ const PageAdminEmployees: FC = () => {
       <Modal
         title="Add an employee"
         visible={visible}
-        onOk={handleOk}
         onCancel={handleCancel}
         destroyOnClose
-        footer={[
-          <Button key="back" onClick={handleCancel}>
-            Cancel
-          </Button>,
-          <Button
-            key="submit"
-            htmlType="submit"
-            type="primary"
-            onClick={handleOk}
-          >
-            Submit
-          </Button>,
-        ]}
+        footer={null}
       >
-        <Form layout="vertical">
+        <Form
+          layout="vertical"
+          initialValues={{ remember: false }}
+          onFinish={() => handleOk()}
+        >
           <Form.Item
             label="name"
             name="name"
             rules={[{ required: true, message: "Please input a name" }]}
           >
-            <Input name="name" onChange={handleChange} value={form.name} />
+            <Input
+              name="name"
+              onChange={handleChange}
+              value={form.name}
+              defaultValue={form.name}
+            />
           </Form.Item>
 
           <Form.Item
@@ -181,6 +177,7 @@ const PageAdminEmployees: FC = () => {
               name="department"
               onChange={handleChange}
               value={form.department}
+              defaultValue={form.department}
             />
           </Form.Item>
 
@@ -193,7 +190,14 @@ const PageAdminEmployees: FC = () => {
               name="position"
               onChange={handleChange}
               value={form.position}
+              defaultValue={form.position}
             />
+          </Form.Item>
+
+          <Form.Item>
+            <Button key="submit" htmlType="submit" type="primary">
+              Submit
+            </Button>
           </Form.Item>
         </Form>
       </Modal>

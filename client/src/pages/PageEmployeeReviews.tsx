@@ -1,4 +1,4 @@
-import { Avatar, Input, List, Modal } from "antd";
+import { Avatar, Button, Form, Input, List, Modal } from "antd";
 import React, { FC, useEffect, useReducer, useState } from "react";
 import { useParams } from "react-router-dom";
 import { CheckCircleTwoTone, ClockCircleTwoTone } from "@ant-design/icons";
@@ -115,15 +115,27 @@ const PageEmployeeReviews: FC = () => {
       <Modal
         title="Review"
         visible={visible}
-        onOk={handleOk}
+        footer={null}
         onCancel={handleCancel}
       >
-        <TextArea
-          name="review"
-          rows={4}
-          value={reviewText}
-          onChange={handleChange}
-        />
+        <Form onFinish={() => handleOk()}>
+          <Form.Item
+            rules={[{ required: true, message: "Please add a review" }]}
+            name="review"
+          >
+            <TextArea
+              name="review"
+              rows={4}
+              value={reviewText}
+              onChange={handleChange}
+            />
+          </Form.Item>
+          <Form.Item>
+            <Button key="submit" htmlType="submit" type="primary">
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
       </Modal>
     </section>
   );
