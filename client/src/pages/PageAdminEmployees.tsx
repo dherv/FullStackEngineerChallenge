@@ -195,7 +195,12 @@ const PageAdminEmployees: FC = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button key="submit" htmlType="submit" type="primary">
+            <Button
+              style={{ marginTop: "1rem" }}
+              key="submit"
+              htmlType="submit"
+              type="primary"
+            >
               Submit
             </Button>
           </Form.Item>

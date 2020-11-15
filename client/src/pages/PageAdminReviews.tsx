@@ -204,6 +204,7 @@ const PageAdminReviews: FC = () => {
               key="submit"
               htmlType="submit"
               type="primary"
+              style={{ marginTop: "1rem" }}
               disabled={!selectedReviewer || !selectedEmployee}
             >
               Submit
