@@ -1,10 +1,8 @@
-import { Avatar, Button, Form, Input, List, Modal } from 'antd';
-import { FormInstance } from 'antd/lib/form';
-import React, { FC, useEffect, useReducer, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { CheckCircleTwoTone, ClockCircleTwoTone } from '@ant-design/icons';
-import Api from '../Api';
-import { IReview } from '../types/app.types';
+import { Avatar, Button, Form, Input, List, Modal } from "antd";
+import React, { FC, useEffect, useReducer, useState } from "react";
+import { useParams } from "react-router-dom";
+import { CheckCircleTwoTone, ClockCircleTwoTone } from "@ant-design/icons";
+import Api from "../Api";
 import FormButtonSubmit from "../components/FormButtonSubmit";
 import { IReview } from "../types/app.types";
 
@@ -132,7 +130,7 @@ const PageEmployeeReviews: FC = () => {
         onCancel={handleCancel}
         destroyOnClose
       >
-        <Form initialValues={{ remember: false }}  onFinish={handleOk}>
+        <Form initialValues={{ remember: false }} onFinish={handleOk}>
           <Form.Item
             rules={[{ required: true, message: "Please write a review" }]}
             name="review"
