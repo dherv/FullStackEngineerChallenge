@@ -1,9 +1,12 @@
-import { Button, Form, Input, Modal, Space, Table } from "antd";
+import { Form, Input, Modal, Table } from "antd";
 import React, { FC, useEffect, useReducer, useState } from "react";
 import { NavLink } from "react-router-dom";
 import Api from "../Api";
 import AddElement from "../components/AddElement";
+import FormButtonSubmit from "../components/FormButtonSubmit";
+import TableActionButtons from "../components/TableActionButtons";
 import { IEmployee } from "../types/app.types";
+import TableButtonActions from '../components/TableButtonActions';
 
 const reducer = (state: any, action: any) => {
   switch (action.type) {
@@ -49,7 +52,7 @@ const PageAdminEmployees: FC = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      render: (text: string, record: any) => (
+      render: (text: string, record: IEmployee) => (
         <NavLink to={`/employee/${record.id}/reviews`}>{text}</NavLink>
       ),
     },
@@ -66,16 +69,17 @@ const PageAdminEmployees: FC = () => {
     {
       title: "Action",
       key: "action",
-      render: (text: string, record: any) => (
-        <Space size="middle">
-          <a onClick={() => handleEdit(record)}>Edit</a>
-          <a onClick={() => handleDelete(record)}>Delete</a>
-        </Space>
+      render: (text: string, record: IEmployee) => (
+        <TableButtonActions
+          record={record}
+          onClickEdit={handleEdit}
+          onClickDelete={handleDelete}
+        ></TableButtonActions>
       ),
     },
   ];
 
-  const [data, dispatchData] = useReducer(reducer, [], () => []) as any;
+  const [data, dispatchData] = useReducer(reducer, []) as any;
   const [employeeEdit, setEmployeeEdit] = useState<number | null>(null);
   const [form, setForm] = useState<any>({
     name: "",
@@ -189,14 +193,7 @@ const PageAdminEmployees: FC = () => {
           </Form.Item>
 
           <Form.Item>
-            <Button
-              style={{ marginTop: "1rem" }}
-              key="submit"
-              htmlType="submit"
-              type="primary"
-            >
-              Submit
-            </Button>
+            <FormButtonSubmit />
           </Form.Item>
         </Form>
       </Modal>

@@ -1,8 +1,11 @@
-import { Button, Form, Modal, Select, Space, Table } from 'antd';
-import React, { FC, useEffect, useReducer, useState } from 'react';
-import Api from '../Api';
-import AddElement from '../components/AddElement';
+import { Form, Modal, Select, Table } from "antd";
+import React, { FC, useEffect, useReducer, useState } from "react";
+import Api from "../Api";
+import AddElement from "../components/AddElement";
+import FormButtonSubmit from "../components/FormButtonSubmit";
+import TableActionButtons from "../components/TableActionButtons";
 import { IEmployee, IReview } from "../types/app.types";
+import TableButtonActions from '../components/TableButtonActions';
 
 const { Option } = Select;
 
@@ -90,11 +93,11 @@ const PageAdminReviews: FC = () => {
       title: "Action",
       key: "action",
       render: (text: string, record: IReview) => (
-        <TableActionButtons
+        <TableButtonActions
           record={record}
           onClickEdit={handleEdit}
           onClickDelete={handleDelete}
-        ></TableActionButtons>
+        ></TableButtonActions>
       ),
     },
   ];
@@ -221,15 +224,9 @@ const PageAdminReviews: FC = () => {
             </Select>
           </Form.Item>
           <Form.Item>
-            <Button
-              key="submit"
-              htmlType="submit"
-              type="primary"
-              style={{ marginTop: "1rem" }}
+            <FormButtonSubmit
               disabled={!selectedReviewer || !selectedEmployee}
-            >
-              Submit
-            </Button>
+            />
           </Form.Item>
         </Form>
       </Modal>

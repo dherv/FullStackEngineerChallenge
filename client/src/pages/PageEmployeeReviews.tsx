@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { CheckCircleTwoTone, ClockCircleTwoTone } from '@ant-design/icons';
 import Api from '../Api';
 import { IReview } from '../types/app.types';
+import FormButtonSubmit from "../components/FormButtonSubmit";
 import { IReview } from "../types/app.types";
 
 const { TextArea } = Input;
@@ -145,14 +146,7 @@ const PageEmployeeReviews: FC = () => {
             />
           </Form.Item>
           <Form.Item>
-            <Button
-              style={{ marginTop: "1rem" }}
-              key="submit"
-              htmlType="submit"
-              type="primary"
-            >
-              Submit
-            </Button>
+            <FormButtonSubmit />
           </Form.Item>
         </Form>
       </Modal>
