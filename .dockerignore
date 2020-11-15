@@ -1,0 +1,4 @@
+client/nodes_modules/**/*
+client/nodes_modules
+server/nodes_modules/**/*
+server/nodes_modules

@@ -1,0 +1,49 @@
+version: "3.7"
+services:
+  client:
+    container_name: paypay_test_dh_client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3000:80
+    depends_on:
+      - server
+    restart: unless-stopped
+    tty: true
+  server:
+    container_name: paypay_test_dh_server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 7000:3000
+    depends_on:
+      - database
+    restart: unless-stopped
+    tty: true
+    environment:
+      - "DB_PORT=3306"
+      - "DB_HOST=database"
+  # The Database
+  database:
+    container_name: paypay_test_dh_database
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - dbdata:/var/lib/mysql:cached
+    environment:
+      - "MYSQL_DATABASE=paypay_test_dh_db"
+      - "MYSQL_USER=root"
+      - "MYSQL_ROOT_PASSWORD=root"
+    ports:
+      - 33065:3306
+volumes:
+  dbdata:
