@@ -3,6 +3,7 @@ import React, { FC, useEffect, useReducer, useState } from "react";
 import { NavLink } from "react-router-dom";
 import Api from "../Api";
 import AddElement from "../components/AddElement";
+import { IEmployee } from "../types/app.types";
 
 const reducer = (state: any, action: any) => {
   switch (action.type) {
@@ -27,26 +28,17 @@ const reducer = (state: any, action: any) => {
 };
 
 const PageAdminEmployees: FC = () => {
-  const handleEdit = ({
-    id,
-    name,
-    department,
-    position,
-  }: {
-    id: number;
-    name: string;
-    department: string;
-    position: string;
-  }) => {
+  const handleEdit = (record: IEmployee) => {
     setForm({
-      name,
-      department,
-      position,
+      name: record.name,
+      department: record.department,
+      position: record.position,
     });
-    setEmployeeEdit(id);
+    setEmployeeEdit(record.id);
     setVisible(true);
   };
-  const handleDelete = (record: any) => {
+
+  const handleDelete = (record: IEmployee) => {
     Api.delete(`/employees/${record.id}`).then(() => {
       dispatchData({ type: "delete", payload: record });
     });
@@ -93,7 +85,7 @@ const PageAdminEmployees: FC = () => {
   const [visible, setVisible] = useState<boolean>(false);
   useEffect(() => {
     const fetchEmployees = () => {
-      return Api.get("/employees").then((response) =>
+      return Api.get("/employees").then((response: IEmployee[]) =>
         dispatchData({ type: "init", payload: response })
       );
     };
@@ -105,16 +97,18 @@ const PageAdminEmployees: FC = () => {
     const postEmployee = form;
     if (employeeEdit) {
       return Api.put(`/employees/${employeeEdit}`, postEmployee).then(
-        (response) => {
+        (response: IEmployee) => {
           dispatchData({ type: "update", payload: response });
           reset();
         }
       );
     } else {
-      return Api.post("/employees", postEmployee).then((response) => {
-        dispatchData({ type: "add", payload: response });
-        reset();
-      });
+      return Api.post("/employees", postEmployee).then(
+        (response: IEmployee) => {
+          dispatchData({ type: "add", payload: response });
+          reset();
+        }
+      );
     }
   };
 

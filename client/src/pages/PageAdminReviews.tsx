@@ -2,6 +2,7 @@ import { Button, Form, Modal, Select, Space, Table } from 'antd';
 import React, { FC, useEffect, useReducer, useState } from 'react';
 import Api from '../Api';
 import AddElement from '../components/AddElement';
+import { IEmployee, IReview } from "../types/app.types";
 
 const { Option } = Select;
 
@@ -29,13 +30,13 @@ const reducer = (state: any, action: any) => {
 };
 
 const PageAdminReviews: FC = () => {
-  const handleEdit = (record: any) => {
+  const handleEdit = (record: IReview) => {
     setReviewEdit(record.id);
     setEditEmployee({ id: record.employee.id, name: record.employee.name });
     setEditReviewer({ id: record.reviewer.id, name: record.reviewer.name });
     setVisible(true);
   };
-  const handleDelete = (record: any) => {
+  const handleDelete = (record: IReview) => {
     Api.delete(`/reviews/${record.id}`).then(() => {
       dispatchData({ type: "delete", payload: record });
     });
@@ -46,7 +47,7 @@ const PageAdminReviews: FC = () => {
       title: "Employee",
       dataIndex: "name",
       key: "name",
-      render: (text: string, record: any) => {
+      render: (text: string, record: IReview) => {
         return record.employee.name;
       },
     },
@@ -54,7 +55,7 @@ const PageAdminReviews: FC = () => {
       title: "Reviewer",
       dataIndex: "reviewer",
       key: "reviewer",
-      render: (text: string, record: any) => {
+      render: (text: string, record: IReview) => {
         return record.reviewer.name;
       },
     },
@@ -62,49 +63,67 @@ const PageAdminReviews: FC = () => {
       title: "Review",
       dataIndex: "review",
       key: "review",
-      render: (text: string, record: any) => {
-        return <div style={{overflow: 'auto', maxWidth: 250,  
-        textOverflow: "ellipsis",
-        whiteSpace: "nowrap"}}>{record.text}</div>;
+      render: (text: string, record: IReview) => {
+        return (
+          <div
+            style={{
+              overflow: "auto",
+              maxWidth: 250,
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {record.text}
+          </div>
+        );
       },
     },
     {
       title: "Pending",
       dataIndex: "pending",
       key: "pending",
-      render: (text: string, record: any) => {
+      render: (text: string, record: IReview) => {
         return record.pending.toString();
       },
     },
     {
       title: "Action",
       key: "action",
-      render: (text: string, record: any) => (
-        <Space size="middle">
-          <a onClick={() => handleEdit(record)}>Edit</a>
-          <a onClick={() => handleDelete(record)}>Delete</a>
-        </Space>
+      render: (text: string, record: IReview) => (
+        <TableActionButtons
+          record={record}
+          onClickEdit={handleEdit}
+          onClickDelete={handleDelete}
+        ></TableActionButtons>
       ),
     },
   ];
 
   const [data, dispatchData] = useReducer(reducer, []) as any;
-  const [employees, setEmployees] = useState<any[]>([]);
+  const [employees, setEmployees] = useState<IEmployee[]>([]);
   const [visible, setVisible] = useState<boolean>(false);
   const [selectedEmployee, setSelectedEmployee] = useState<number | null>(null);
   const [selectedReviewer, setSelectedReviewer] = useState<number | null>(null);
   const [reviewEdit, setReviewEdit] = useState<number | null>(null);
-  const [editEmployee, setEditEmployee] = useState<any>({});
-  const [editReviewer, setEditReviewer] = useState<any>({});
+  const [editEmployee, setEditEmployee] = useState<{
+    id: number;
+    name: string;
+  } | null>();
+  const [editReviewer, setEditReviewer] = useState<{
+    id: number;
+    name: string;
+  } | null>();
 
   useEffect(() => {
     const fetchReviews = () => {
-      return Api.get("/reviews").then((response) =>
+      return Api.get("/reviews").then((response: IReview[]) =>
         dispatchData({ type: "init", payload: response })
       );
     };
     const fetchEmployees = () => {
-      return Api.get("/employees").then((response) => setEmployees(response));
+      return Api.get("/employees").then((response: IEmployee[]) =>
+        setEmployees(response)
+      );
     };
     fetchReviews();
     fetchEmployees();
@@ -119,12 +138,14 @@ const PageAdminReviews: FC = () => {
       text: null,
     };
     if (reviewEdit) {
-      return Api.put(`/reviews/${reviewEdit}`, postReview).then((response) => {
-        dispatchData({ type: "update", payload: response });
-        reset();
-      });
+      return Api.put(`/reviews/${reviewEdit}`, postReview).then(
+        (response: IReview) => {
+          dispatchData({ type: "update", payload: response });
+          reset();
+        }
+      );
     } else {
-      return Api.post("/reviews", postReview).then((response) => {
+      return Api.post("/reviews", postReview).then((response: IReview) => {
         dispatchData({ type: "add", payload: response });
         reset();
       });

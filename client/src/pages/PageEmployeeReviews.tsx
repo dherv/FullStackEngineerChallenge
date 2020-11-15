@@ -4,6 +4,8 @@ import React, { FC, useEffect, useReducer, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CheckCircleTwoTone, ClockCircleTwoTone } from '@ant-design/icons';
 import Api from '../Api';
+import { IReview } from '../types/app.types';
+import { IReview } from "../types/app.types";
 
 const { TextArea } = Input;
 
@@ -28,20 +30,20 @@ const reducer = (state: any, action: any) => {
 const PageEmployeeReviews: FC = () => {
   const params = useParams() as any;
   const [data, dispatchData] = useReducer(reducer, [], () => []) as any;
-  const [review, setReview] = useState<any>();
-  const [reviewText, setReviewText] = useState<any>();
+  const [editReview, setEditReview] = useState<IReview | null>(null);
+  const [reviewText, setReviewText] = useState<string>();
   const [visible, setVisible] = useState<boolean>(false);
-
 
   useEffect(() => {
     const fetchReviews = () => {
-      Api.get(`/reviews?reviewerId=${params.id}/`).then((response) => {
-
-        dispatchData({
-          type: "init",
-          payload: response,
-        });
-      });
+      Api.get(`/reviews?reviewerId=${params.id}/`).then(
+        (response: IReview[]) => {
+          dispatchData({
+            type: "init",
+            payload: response,
+          });
+        }
+      );
     };
     fetchReviews();
   }, [params.id]);
@@ -51,22 +53,24 @@ const PageEmployeeReviews: FC = () => {
   };
 
   const handleClickEdit = (item: any) => {
-    setReview(item);
+    setEditReview(item);
     setReviewText(item.text);
     setVisible(true);
-   
-   
   };
 
   const handleOk = () => {
-    const putReview = { ...review, text: reviewText, pending: false };
-    Api.put(`/reviews/${review.id}`, putReview).then((response) => {
-      dispatchData({
-        type: "update",
-        payload: response,
-      });
-      reset();
-    });
+    if (editReview) {
+      const putReview = { ...editReview, text: reviewText, pending: false };
+      Api.put(`/reviews/${editReview.id}`, putReview).then(
+        (response: IReview) => {
+          dispatchData({
+            type: "update",
+            payload: response,
+          });
+          reset();
+        }
+      );
+    }
   };
 
   const handleCancel = () => {
@@ -74,22 +78,25 @@ const PageEmployeeReviews: FC = () => {
   };
 
   const reset = () => {
-
-    setReview(null);
+    setEditReview(null);
     setReviewText("");
     setVisible(false);
   };
-  
+
   return (
     <section>
       <List
         itemLayout="horizontal"
         dataSource={data}
-        renderItem={(item: any) => (
+        renderItem={(item: IReview) => (
           <List.Item
             actions={[
-              <Button type="link" key="list-loadmore-edit" onClick={() => handleClickEdit(item)}>
-                edit
+              <Button
+                type="link"
+                key="edit"
+                onClick={() => handleClickEdit(item)}
+              >
+                Edit
               </Button>,
             ]}
           >
