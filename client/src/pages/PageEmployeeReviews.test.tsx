@@ -70,6 +70,8 @@ describe('PageEmployeeReviews page', () => {
   });
 
   test('should update review on submit', async () => {
+    // remove antd console warning on validation
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
     // wait the items have loaded
     await waitFor(() =>
       expect(

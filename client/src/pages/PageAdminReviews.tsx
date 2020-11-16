@@ -31,13 +31,18 @@ const PageAdminReviews: FC = () => {
         dispatchReviews({ type: 'init', payload: response })
       );
     };
+    fetchReviews();
+    return () => {};
+  }, []);
+
+  useEffect(() => {
     const fetchEmployees = () => {
       return Api.get('/employees').then((response: IEmployee[]) =>
         setEmployees(response)
       );
     };
-    fetchReviews();
     fetchEmployees();
+    return () => {};
   }, []);
 
   const handleClickAdd = () => setVisible(true);
@@ -119,25 +124,15 @@ const PageAdminReviews: FC = () => {
       title: 'Review',
       dataIndex: 'review',
       key: 'review',
-      render: (text: string, record: IReview) => {
-        return (
-          <div
-            style={{
-              overflow: 'auto',
-              maxWidth: 250,
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            {record.text}
-          </div>
-        );
-      },
+      responsive: ['md'],
+      ellipsis: true,
+      render: (text: string, record: IReview) => <div>{record.text}</div>,
     },
     {
       title: 'Pending',
       dataIndex: 'pending',
       key: 'pending',
+      responsive: ['md'],
       render: (text: string, record: IReview) => {
         return record.pending.toString();
       },
@@ -158,7 +153,7 @@ const PageAdminReviews: FC = () => {
   return (
     <section>
       <AddElement text="Add a review" onClick={handleClickAdd} />
-      <Table columns={columns} dataSource={reviews} />
+      <Table columns={columns as any} dataSource={reviews} rowKey="id" />
       <Modal
         title="Add a review"
         visible={visible}
@@ -168,15 +163,18 @@ const PageAdminReviews: FC = () => {
       >
         <Form
           layout="vertical"
-          initialValues={{ remember: false }}
-          onFinish={() => handleOk()}
+          initialValues={{
+            remember: false,
+            employee: editEmployee ? editEmployee.name : (null as any),
+            reviewer: editReviewer ? editReviewer.name : (null as any),
+          }}
+          onFinish={handleOk}
         >
           <Form.Item label="select a person to review" name="employee">
             <Select
               placeholder="Select an employee to review"
               style={{ width: 200 }}
               onChange={handleChangeEmployee}
-              defaultValue={editEmployee ? editEmployee.name : (null as any)}
             >
               {employees.map((employee: any) => (
                 <Option key={`employee-${employee.id}`} value={employee.id}>
@@ -195,7 +193,6 @@ const PageAdminReviews: FC = () => {
               style={{ width: 200 }}
               disabled={!selectedEmployee}
               onChange={handleChangeReviewer}
-              defaultValue={editReviewer ? editReviewer.name : (null as any)}
             >
               {employees
                 .filter((employee: any) => employee.id !== selectedEmployee)

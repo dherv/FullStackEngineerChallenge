@@ -25,6 +25,7 @@ const PageAdminEmployees: FC = () => {
       );
     };
     fetchEmployees();
+    return () => {};
   }, []);
 
   const handleOk = () => {
@@ -128,7 +129,12 @@ const PageAdminEmployees: FC = () => {
       >
         <Form
           layout="vertical"
-          initialValues={{ remember: false }}
+          initialValues={{
+            remember: false,
+            name: form.name,
+            department: form.department,
+            position: form.position,
+          }}
           onFinish={handleOk}
         >
           <Form.Item
@@ -141,7 +147,6 @@ const PageAdminEmployees: FC = () => {
               placeholder="John Wick"
               onChange={handleChange}
               value={form.name}
-              defaultValue={form.name}
             />
           </Form.Item>
 
@@ -160,7 +165,6 @@ const PageAdminEmployees: FC = () => {
               placeholder="IT"
               onChange={handleChange}
               value={form.department}
-              defaultValue={form.department}
             />
           </Form.Item>
 
@@ -179,7 +183,6 @@ const PageAdminEmployees: FC = () => {
               placeholder="Frontend"
               onChange={handleChange}
               value={form.position}
-              defaultValue={form.position}
             />
           </Form.Item>
 

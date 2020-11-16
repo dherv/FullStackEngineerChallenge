@@ -28,6 +28,7 @@ const PageEmployeeReviews: FC = () => {
       );
     };
     fetchReviews();
+    return () => {};
   }, [params.id]);
 
   const handleChange = (event: any) => {
@@ -122,7 +123,10 @@ const PageEmployeeReviews: FC = () => {
         onCancel={handleCancel}
         destroyOnClose
       >
-        <Form initialValues={{ remember: false }} onFinish={handleOk}>
+        <Form
+          initialValues={{ remember: false, review: reviewText }}
+          onFinish={handleOk}
+        >
           <Form.Item
             rules={[
               {
@@ -136,7 +140,6 @@ const PageEmployeeReviews: FC = () => {
               name="review"
               rows={4}
               value={reviewText}
-              defaultValue={reviewText}
               placeholder="please write your review here"
               onChange={handleChange}
             />
