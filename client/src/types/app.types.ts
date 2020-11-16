@@ -3,7 +3,7 @@ export interface IReview {
   employeeId: number;
   pending: boolean;
   reviewerId: number;
-  text: string;
+  text: string | null;
   reviewer: IEmployee;
   employee: IEmployee;
 }

@@ -1,128 +1,27 @@
 import { rest } from 'msw';
+import { employee_1, review_1, review_2 } from './samples';
 
 const url = 'http://localhost:7000/api';
 
 export const handlers = [
   rest.get(`${url}/reviews`, (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json([
-        {
-          id: 2,
-          employeeId: 1,
-          pending: false,
-          reviewerId: 2,
-          text: 'test review',
-          reviewer: {
-            id: 2,
-            name: 'employee_2',
-            department: 'IT',
-            position: 'Frontend',
-          },
-          employee: {
-            id: 1,
-            name: 'employee_1',
-            department: 'IT',
-            position: 'Frontend',
-          },
-        },
-        {
-          id: 1,
-          employeeId: 1,
-          pending: true,
-          reviewerId: 2,
-          text: null,
-          reviewer: {
-            id: 2,
-            name: 'employee_2',
-            department: 'IT',
-            position: 'Frontend',
-          },
-          employee: {
-            id: 1,
-            name: 'employee_1',
-            department: 'IT',
-            position: 'Frontend',
-          },
-        },
-      ])
-    );
+    return res(ctx.status(200), ctx.json([review_1, review_2]));
   }),
   rest.get(`${url}/employees`, (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json([
-        {
-          id: 1,
-          name: 'employee',
-          department: 'IT',
-          position: 'Frontend',
-        },
-      ])
-    );
+    return res(ctx.status(200), ctx.json([employee_1]));
   }),
 
   rest.put(`${url}/employees`, (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json([
-        {
-          id: 1,
-          name: 'employee',
-          department: 'IT',
-          position: 'Frontend',
-        },
-      ])
-    );
+    return res(ctx.status(200), ctx.json([employee_1]));
   }),
 
   rest.put(`${url}/reviews/1`, (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        id: 1,
-        employeeId: 1,
-        pending: false,
-        reviewerId: 2,
-        text: 'my review',
-        reviewer: {
-          id: 2,
-          name: 'employee_2',
-          department: 'IT',
-          position: 'Frontend',
-        },
-        employee: {
-          id: 1,
-          name: 'employee_1',
-          department: 'IT',
-          position: 'Frontend',
-        },
-      })
-    );
+    const text = 'my review';
+    return res(ctx.status(200), ctx.json({ ...review_1, text }));
   }),
 
   rest.put(`${url}/reviews/2`, (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.json({
-        id: 2,
-        employeeId: 1,
-        pending: false,
-        reviewerId: 2,
-        text: 'edit review',
-        reviewer: {
-          id: 2,
-          name: 'employee_2',
-          department: 'IT',
-          position: 'Frontend',
-        },
-        employee: {
-          id: 1,
-          name: 'employee_1',
-          department: 'IT',
-          position: 'Frontend',
-        },
-      })
-    );
+    const text = 'edit review';
+    return res(ctx.status(200), ctx.json({ ...review_2, text: text }));
   }),
 ];

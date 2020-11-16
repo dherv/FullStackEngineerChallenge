@@ -31,7 +31,7 @@ describe('PageEmployeeReviews page', () => {
     await waitFor(() =>
       expect(screen.queryAllByText(/employee_1/)).toHaveLength(3)
     );
-    userEvent.click(screen.queryAllByText(/Edit/)[0]);
+    userEvent.click(screen.queryAllByText(/Edit/)[1]);
     await waitFor(() => expect(screen.getByText(/Review/)).toBeInTheDocument());
   });
 
@@ -43,7 +43,7 @@ describe('PageEmployeeReviews page', () => {
       ).toBeInTheDocument()
     );
     // open the modal for the review to edit
-    userEvent.click(screen.queryAllByText(/Edit/)[0]);
+    userEvent.click(screen.queryAllByText(/Edit/)[1]);
     await waitFor(() =>
       expect(screen.getByRole('textbox')).toHaveDisplayValue('test review')
     );
@@ -57,7 +57,7 @@ describe('PageEmployeeReviews page', () => {
       ).toBeInTheDocument()
     );
     // open the modal for the review to create
-    userEvent.click(screen.queryAllByText(/Edit/)[1]);
+    userEvent.click(screen.queryAllByText(/Edit/)[0]);
     userEvent.type(screen.getByRole('textbox'), 'my review');
     await waitFor(() =>
       expect(screen.getByText('my review')).toBeInTheDocument()
@@ -77,7 +77,7 @@ describe('PageEmployeeReviews page', () => {
       ).toBeInTheDocument()
     );
     // open the modal for the review to create
-    userEvent.click(screen.queryAllByText(/Edit/)[0]);
+    userEvent.click(screen.queryAllByText(/Edit/)[1]);
     userEvent.clear(screen.getByRole('textbox'));
     userEvent.type(screen.getByRole('textbox'), 'edit review');
     await waitFor(() =>
