@@ -137,6 +137,7 @@ const PageEmployeeReviews: FC = () => {
               rows={4}
               value={reviewText}
               defaultValue={reviewText}
+              placeholder="please write your review here"
               onChange={handleChange}
             />
           </Form.Item>

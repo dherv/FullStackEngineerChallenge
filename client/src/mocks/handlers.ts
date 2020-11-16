@@ -8,9 +8,9 @@ export const handlers = [
       ctx.status(200),
       ctx.json([
         {
-          id: 1,
+          id: 2,
           employeeId: 1,
-          pending: true,
+          pending: false,
           reviewerId: 2,
           text: 'test review',
           reviewer: {
@@ -73,6 +73,56 @@ export const handlers = [
           position: 'Frontend',
         },
       ])
+    );
+  }),
+
+  rest.put(`${url}/reviews/1`, (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({
+        id: 1,
+        employeeId: 1,
+        pending: false,
+        reviewerId: 2,
+        text: 'my review',
+        reviewer: {
+          id: 2,
+          name: 'employee_2',
+          department: 'IT',
+          position: 'Frontend',
+        },
+        employee: {
+          id: 1,
+          name: 'employee_1',
+          department: 'IT',
+          position: 'Frontend',
+        },
+      })
+    );
+  }),
+
+  rest.put(`${url}/reviews/2`, (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.json({
+        id: 2,
+        employeeId: 1,
+        pending: false,
+        reviewerId: 2,
+        text: 'edit review',
+        reviewer: {
+          id: 2,
+          name: 'employee_2',
+          department: 'IT',
+          position: 'Frontend',
+        },
+        employee: {
+          id: 1,
+          name: 'employee_1',
+          department: 'IT',
+          position: 'Frontend',
+        },
+      })
     );
   }),
 ];
