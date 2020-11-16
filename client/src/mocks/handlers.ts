@@ -6,6 +6,7 @@ import {
   employee_edit,
   review_1,
   review_2,
+  review_create,
 } from './samples';
 
 const url = 'http://localhost:7000/api';
@@ -22,6 +23,10 @@ export const handlers = [
   }),
   rest.put(`${url}/employees/1`, (req, res, ctx) => {
     return res(ctx.status(200), ctx.json(employee_edit));
+  }),
+
+  rest.post(`${url}/reviews`, (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(review_create));
   }),
 
   rest.put(`${url}/reviews/1`, (req, res, ctx) => {

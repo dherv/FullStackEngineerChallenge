@@ -47,3 +47,13 @@ export const review_2: IReview = {
   reviewer: employee_2,
   employee: employee_1,
 };
+
+export const review_create = {
+  id: 3,
+  employeeId: 1,
+  pending: true,
+  reviewerId: 2,
+  text: null,
+  reviewer: employee_2,
+  employee: employee_1,
+};
