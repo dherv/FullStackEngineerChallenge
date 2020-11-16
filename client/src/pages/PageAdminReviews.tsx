@@ -4,35 +4,13 @@ import Api from '../Api';
 import AddElement from '../components/AddElement';
 import FormButtonSubmit from '../components/FormButtonSubmit';
 import TableButtonActions from '../components/TableButtonActions';
+import { reducer } from '../reducers/app.reducer';
 import { IEmployee, IReview } from '../types/app.types';
 
 const { Option } = Select;
 
-const reducer = (state: any, action: any) => {
-  switch (action.type) {
-    case 'init':
-      return action.payload;
-    case 'add':
-      console.log(action.payload);
-      return [...state.slice(), action.payload];
-    case 'update':
-      return state.map((item: any) => {
-        if (item.id !== action.payload.id) {
-          return item;
-        }
-        return {
-          ...action.payload,
-        };
-      });
-    case 'delete':
-      return state.filter((item: any) => item.id !== action.payload.id);
-    default:
-      throw new Error();
-  }
-};
-
 const PageAdminReviews: FC = () => {
-  const [data, dispatchData] = useReducer(reducer, []) as any;
+  const [reviews, dispatchReviews] = useReducer(reducer, []) as any;
   const [employees, setEmployees] = useState<IEmployee[]>([]);
   const [visible, setVisible] = useState<boolean>(false);
   const [selectedEmployee, setSelectedEmployee] = useState<number | null>(null);
@@ -50,7 +28,7 @@ const PageAdminReviews: FC = () => {
   useEffect(() => {
     const fetchReviews = () => {
       return Api.get('/reviews').then((response: IReview[]) =>
-        dispatchData({ type: 'init', payload: response })
+        dispatchReviews({ type: 'init', payload: response })
       );
     };
     const fetchEmployees = () => {
@@ -74,13 +52,13 @@ const PageAdminReviews: FC = () => {
     if (reviewEdit) {
       return Api.put(`/reviews/${reviewEdit}`, postReview).then(
         (response: IReview) => {
-          dispatchData({ type: 'update', payload: response });
+          dispatchReviews({ type: 'update', payload: response });
           reset();
         }
       );
     } else {
       return Api.post('/reviews', postReview).then((response: IReview) => {
-        dispatchData({ type: 'add', payload: response });
+        dispatchReviews({ type: 'add', payload: response });
         reset();
       });
     }
@@ -107,7 +85,7 @@ const PageAdminReviews: FC = () => {
 
   const handleDelete = (record: IReview) => {
     Api.delete(`/reviews/${record.id}`).then(() => {
-      dispatchData({ type: 'delete', payload: record });
+      dispatchReviews({ type: 'delete', payload: record });
     });
   };
 
@@ -180,7 +158,7 @@ const PageAdminReviews: FC = () => {
   return (
     <section>
       <AddElement text="Add a review" onClick={handleClickAdd} />
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={reviews} />
       <Modal
         title="Add a review"
         visible={visible}

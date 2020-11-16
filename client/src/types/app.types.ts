@@ -4,7 +4,6 @@ export interface IReview {
   pending: boolean;
   reviewerId: number;
   text: string;
-  score: number;
   reviewer: IEmployee;
   employee: IEmployee;
 }

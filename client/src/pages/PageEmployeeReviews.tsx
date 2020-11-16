@@ -4,31 +4,14 @@ import { useParams } from 'react-router-dom';
 import { CheckCircleTwoTone, ClockCircleTwoTone } from '@ant-design/icons';
 import Api from '../Api';
 import FormButtonSubmit from '../components/FormButtonSubmit';
+import { reducer } from '../reducers/app.reducer';
 import { IReview } from '../types/app.types';
 
 const { TextArea } = Input;
 
-const reducer = (state: any, action: any) => {
-  switch (action.type) {
-    case 'init':
-      return action.payload;
-    case 'update':
-      return state.map((item: any, index: number) => {
-        if (item.id !== action.payload.id) {
-          return item;
-        }
-        return {
-          ...action.payload,
-        };
-      });
-    default:
-      throw new Error();
-  }
-};
-
 const PageEmployeeReviews: FC = () => {
   const params = useParams() as any;
-  const [data, dispatchData] = useReducer(reducer, [], () => []) as any;
+  const [reviews, dipatchReviews] = useReducer(reducer, []) as any;
   const [editReview, setEditReview] = useState<IReview | null>(null);
   const [reviewText, setReviewText] = useState<string>();
   const [visible, setVisible] = useState<boolean>(false);
@@ -37,7 +20,7 @@ const PageEmployeeReviews: FC = () => {
     const fetchReviews = () => {
       Api.get(`/reviews?reviewerId=${params.id}/`).then(
         (response: IReview[]) => {
-          dispatchData({
+          dipatchReviews({
             type: 'init',
             payload: response,
           });
@@ -66,7 +49,7 @@ const PageEmployeeReviews: FC = () => {
       };
       Api.put(`/reviews/${editReview.id}`, putReview).then(
         (response: IReview) => {
-          dispatchData({
+          dipatchReviews({
             type: 'update',
             payload: response,
           });
@@ -90,7 +73,7 @@ const PageEmployeeReviews: FC = () => {
     <section>
       <List
         itemLayout="horizontal"
-        dataSource={data}
+        dataSource={reviews}
         renderItem={(item: IReview) => (
           <List.Item
             actions={[

@@ -5,32 +5,11 @@ import Api from '../Api';
 import AddElement from '../components/AddElement';
 import FormButtonSubmit from '../components/FormButtonSubmit';
 import TableButtonActions from '../components/TableButtonActions';
+import { reducer } from '../reducers/app.reducer';
 import { IEmployee } from '../types/app.types';
 
-const reducer = (state: any, action: any) => {
-  switch (action.type) {
-    case 'init':
-      return action.payload;
-    case 'add':
-      return [...state, action.payload];
-    case 'update':
-      return state.map((item: any) => {
-        if (item.id !== action.payload.id) {
-          return item;
-        }
-        return {
-          ...action.payload,
-        };
-      });
-    case 'delete':
-      return state.filter((item: any) => item.id !== action.payload.id);
-    default:
-      throw new Error();
-  }
-};
-
 const PageAdminEmployees: FC = () => {
-  const [data, dispatchData] = useReducer(reducer, []) as any;
+  const [employees, dispatchEmployees] = useReducer(reducer, []) as any;
   const [employeeEdit, setEmployeeEdit] = useState<number | null>(null);
   const [form, setForm] = useState<any>({
     name: '',
@@ -42,7 +21,7 @@ const PageAdminEmployees: FC = () => {
   useEffect(() => {
     const fetchEmployees = () => {
       return Api.get('/employees').then((response: IEmployee[]) =>
-        dispatchData({ type: 'init', payload: response })
+        dispatchEmployees({ type: 'init', payload: response })
       );
     };
     fetchEmployees();
@@ -53,14 +32,14 @@ const PageAdminEmployees: FC = () => {
     if (employeeEdit) {
       return Api.put(`/employees/${employeeEdit}`, postEmployee).then(
         (response: IEmployee) => {
-          dispatchData({ type: 'update', payload: response });
+          dispatchEmployees({ type: 'update', payload: response });
           reset();
         }
       );
     } else {
       return Api.post('/employees', postEmployee).then(
         (response: IEmployee) => {
-          dispatchData({ type: 'add', payload: response });
+          dispatchEmployees({ type: 'add', payload: response });
           reset();
         }
       );
@@ -94,7 +73,7 @@ const PageAdminEmployees: FC = () => {
 
   const handleDelete = (record: IEmployee) => {
     Api.delete(`/employees/${record.id}`).then(() => {
-      dispatchData({ type: 'delete', payload: record });
+      dispatchEmployees({ type: 'delete', payload: record });
     });
   };
 
@@ -139,7 +118,7 @@ const PageAdminEmployees: FC = () => {
   return (
     <section>
       <AddElement text="Add an employee" onClick={handleClickAdd} />
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={employees} />
       <Modal
         title="Add an employee"
         visible={visible}
