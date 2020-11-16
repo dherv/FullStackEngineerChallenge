@@ -14,6 +14,20 @@ export const employee_2: IEmployee = {
   position: 'Backend',
 };
 
+export const employee_create: IEmployee = {
+  id: 3,
+  name: 'Damien',
+  department: 'IT',
+  position: 'Frontend',
+};
+
+export const employee_edit: IEmployee = {
+  id: 1,
+  name: 'employee_1',
+  department: 'Design',
+  position: 'Designer',
+};
+
 export const review_1: IReview = {
   id: 1,
   employeeId: 1,
