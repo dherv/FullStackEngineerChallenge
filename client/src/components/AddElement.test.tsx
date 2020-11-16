@@ -3,12 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import AddElement from './AddElement';
 
-// TODO: 
-// Skip Test
-// the ant design library <Avatar/> seems to cause an addEventListener issue in the test envrionment
-// I did not succeed in mocking it
-
-describe.skip('AddElement component', () => {
+describe('AddElement component', () => {
   const onClick = jest.fn();
   test('should render the text', () => {
     render(<AddElement text="Add an employee" onClick={onClick} />);
