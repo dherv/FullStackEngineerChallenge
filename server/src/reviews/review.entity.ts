@@ -24,9 +24,6 @@ export class Review {
   @Column({ nullable: true })
   text: string;
 
-  @Column({ nullable: true })
-  score: number;
-
   @ManyToOne(() => Employee, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'reviewerId' })
   reviewer: Employee;

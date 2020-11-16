@@ -6,14 +6,9 @@ import {
   Param,
   Post,
   Put,
-  Query,
 } from '@nestjs/common';
 import { Employee } from './employee.interface';
-import {
-  CreateEmployeeDto,
-  ListAllEntities,
-  UpdateEmployeeDto,
-} from './employees.dto';
+import { CreateEmployeeDto, UpdateEmployeeDto } from './employees.dto';
 import { EmployeesService } from './employees.service';
 
 @Controller('employees')
@@ -26,7 +21,7 @@ export class EmployeesController {
   }
 
   @Get()
-  findAll(@Query() query: ListAllEntities): Promise<Employee[]> {
+  findAll(): Promise<Employee[]> {
     return this.employeesService.findAll();
   }
 

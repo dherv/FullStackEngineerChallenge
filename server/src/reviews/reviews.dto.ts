@@ -3,10 +3,8 @@ export class CreateReviewDto {
   pending: boolean;
   reviewerId: number;
   text: string;
-  score: number;
 }
 export class ListAllEntities {
-  limit: number;
   reviewerId: number;
 }
 export class UpdateReviewDto {
@@ -14,5 +12,4 @@ export class UpdateReviewDto {
   pending: boolean;
   reviewerId: number;
   text: string;
-  score: number;
 }

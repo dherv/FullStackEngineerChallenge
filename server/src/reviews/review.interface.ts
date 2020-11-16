@@ -4,5 +4,4 @@ export interface Review {
   pending: boolean;
   reviewerId: number;
   text: string;
-  score: number;
 }
