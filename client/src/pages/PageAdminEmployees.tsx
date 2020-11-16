@@ -118,7 +118,7 @@ const PageAdminEmployees: FC = () => {
   return (
     <section>
       <AddElement text="Add an employee" onClick={handleClickAdd} />
-      <Table columns={columns} dataSource={employees} />
+      <Table columns={columns} dataSource={employees} rowKey="id" />
       <Modal
         title="Add an employee"
         visible={visible}
@@ -138,6 +138,7 @@ const PageAdminEmployees: FC = () => {
           >
             <Input
               name="name"
+              placeholder="John Wick"
               onChange={handleChange}
               value={form.name}
               defaultValue={form.name}
@@ -156,6 +157,7 @@ const PageAdminEmployees: FC = () => {
           >
             <Input
               name="department"
+              placeholder="IT"
               onChange={handleChange}
               value={form.department}
               defaultValue={form.department}
@@ -174,6 +176,7 @@ const PageAdminEmployees: FC = () => {
           >
             <Input
               name="position"
+              placeholder="Frontend"
               onChange={handleChange}
               value={form.position}
               defaultValue={form.position}
