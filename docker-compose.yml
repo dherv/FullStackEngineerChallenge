@@ -6,8 +6,7 @@ services:
       context: ./client
       dockerfile: Dockerfile
     volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+      - /usr/src/app/client/node_modules
     ports:
       - 3000:80
     depends_on:
@@ -20,8 +19,7 @@ services:
       context: ./server
       dockerfile: Dockerfile
     volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+      - /usr/src/app/server/node_modules
     ports:
       - 7000:3000
     depends_on:
@@ -31,7 +29,6 @@ services:
     environment:
       - "DB_PORT=3306"
       - "DB_HOST=database"
-  # The Database
   database:
     container_name: paypay_test_dh_database
     image: mysql:latest
