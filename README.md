@@ -12,7 +12,7 @@ docker-compose up
 
 ```
 cd client
-yarn test
+yarn install && yarn test
 ```
 
 #### List of routes
