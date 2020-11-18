@@ -1,25 +1,13 @@
 version: "3.7"
 services:
-  client:
-    container_name: paypay_test_dh_client
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    volumes:
-      - /usr/src/app/client/node_modules
-    ports:
-      - 3000:80
-    depends_on:
-      - server
-    restart: unless-stopped
-    tty: true
   server:
     container_name: paypay_test_dh_server
-    command: yarn start:prod
+    command: yarn start:dev
     build:
       context: ./server
       dockerfile: Dockerfile
     volumes:
+      - .:/usr/src/app
       - /usr/src/app/server/node_modules
     ports:
       - 7000:3000
