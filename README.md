@@ -5,8 +5,10 @@
 From the root folder, where the docker-compose.yml file is located, run the following command:
 
 ```
-docker-compose up
+docker-compose up -d
 ```
+
+terminate : `docker-compose down`
 
 #### Run the tests
 
@@ -14,6 +16,17 @@ docker-compose up
 cd client
 yarn install && yarn test
 ```
+
+#### Run the application in dev mode
+
+```
+docker-compose -f docker-compose.dev.yml up -d
+cd client
+yarn install
+yarn start
+```
+
+terminate: `docker-compose -f docker-compose.dev.yml down -v`
 
 #### List of routes
 
